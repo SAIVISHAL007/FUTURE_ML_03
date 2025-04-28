@@ -1,0 +1,6 @@
+TCL in DBMS stands for Transaction Control Language. It includes commands like COMMIT, ROLLBACK, SAVEPOINT.
+SQL is Structured Query Language used for managing databases.
+Primary Key uniquely identifies a record in a database table.
+Foreign Key is a key used to link two tables together.
+Normalization is the process of organizing data to minimize redundancy.
+ACID Properties are Atomicity, Consistency, Isolation, Durability in DBMS.

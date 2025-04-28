@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartBot Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>SmartBot</h1>
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if(event.key === 'Enter') sendMessage();">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            if (!userInput) return;
+
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="user-message">${userInput}</div>`;
+            document.getElementById('user-input').value = '';
+
+            // Show loading indicator
+            const loadingId = 'loading-' + Date.now();
+            chatBox.innerHTML += `<div id="${loadingId}" class="bot-response">Typing...</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Remove loading indicator
+                document.getElementById(loadingId).remove();
+                
+                // Add bot response
+                chatBox.innerHTML += `<div class="bot-response">${data.response}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                console.log("Response received:", data);
+            })
+            .catch(error => {
+                // Remove loading indicator
+                document.getElementById(loadingId).remove();
+                
+                console.error("Error:", error);
+                chatBox.innerHTML += `<div class="bot-response">Sorry, something went wrong. Please try again later.</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+        
+        // Add an initial greeting when the page loads
+        window.onload = function() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `<div class="bot-response">Hello! How can I help you today?</div>`;
+        }
+    </script>
+</body>
+</html>
