@@ -1,7 +1,4 @@
-# FUTURE_ML_03
-
-
-## Customer Support Chatbot:
+# Customer Support Chatbot:
 
 ## Project Overview
 This project is a rule-based customer support chatbot designed to streamline common support interactions. It leverages simple Natural Language Processing techniques to interpret user queries and generate context-aware responses using a CSV-based dataset of predefined intents, patterns, and responses.
